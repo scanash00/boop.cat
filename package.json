@@ -1,0 +1,23 @@
+{
+  "name": "free-static-host",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "vite build --config client/vite.config.js",
+    "format": "prettier --write . && gofmt -w backend-go/"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "blueimp-md5": "^2.19.0",
+    "lucide-react": "^0.561.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "vite": "^5.4.11"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4"
+  }
+}

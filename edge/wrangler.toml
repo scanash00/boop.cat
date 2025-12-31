@@ -1,0 +1,27 @@
+name = "boop-cat-sites"
+main = "worker.js"
+compatibility_date = "2025-12-18"
+
+# Enable workers.dev subdomain (needed for custom domain fallback origin)
+workers_dev = true
+
+# Handle *.boop.cat subdomains 
+# Custom domains use Cloudflare for SaaS and route through sites.boop.cat fallback
+routes = [
+  { pattern = "*.boop.cat/*", zone_name = "boop.cat" },
+  { pattern = "sites.boop.cat", custom_domain = true }
+]
+
+# Custom domain support - the fallback origin (sites.boop.cat) should CNAME to this worker
+kv_namespaces = [
+  { binding = "ROUTING", id = "3ba9d4ae9dcc431d84061e77c73b8fe7" }
+]
+
+[vars]
+ROOT_DOMAIN = "boop.cat"
+B2_DOWNLOAD_BASE = "https://f004.backblazeb2.com"
+B2_BUCKET_NAME = "scan-blue-sites"
+
+# Optimize for performance
+[placement]
+mode = "smart"
