@@ -821,18 +821,21 @@ a:hover {
   transform: scale(1.05);
 }
 
-.tangled-footer-link {
+.tangled-footer-link,
+.footer-external-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   transition: opacity 0.2s ease;
 }
 
-.tangled-footer-link:hover {
+.tangled-footer-link:hover,
+.footer-external-link:hover {
   opacity: 0.8;
 }
 
-.tangled-footer-link .tangled-icon {
+.tangled-footer-link .tangled-icon,
+.footer-external-link svg {
   width: 16px;
   height: 16px;
 }
