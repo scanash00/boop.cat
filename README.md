@@ -1,6 +1,6 @@
 # boop.cat codebase
 
-This is boop.cat's codebase, and it was released under the [Creative Commons Attribution 4.0 International (CC BY 4.0) License](https://creativecommons.org/licenses/by/4.0/).
+This is boop.cat's codebase, and it was released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## Features
 
@@ -87,4 +87,4 @@ The platform provides a REST API for managing sites. See the **API Documentation
 
 ## License
 
-This project is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License. See [LICENSE](LICENSE) for details.
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
