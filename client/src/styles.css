@@ -1251,6 +1251,20 @@ html[data-theme='dark'] .landing-page .cta-card {
   opacity: 0.6;
 }
 
+@media (max-width: 640px) {
+  .footer-inner {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 24px;
+  }
+}
+
 .content-section {
   animation: fadeInUp 0.6s ease-out backwards;
 }
@@ -4279,5 +4293,106 @@ html[data-theme='dark'] .landing-page .cta-card {
 
   .settingsActions .btn {
     width: 100%;
+  }
+}
+
+/* ApiDocs Responsive Styles */
+.api-stats-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.api-stat-card {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.api-endpoint-item {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.api-endpoint-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.api-endpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.api-method-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.api-path {
+  font-size: 14px;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.api-example-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.api-code-block {
+  background: var(--bg-tertiary, #1e1e1e);
+  padding: 16px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--code-text, #e0e0e0);
+  overflow-x: auto;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.api-copy-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--card-text);
+  transition: background 0.2s;
+}
+
+.api-copy-btn:hover {
+  background: var(--sidebar-hover);
+}
+
+@media (max-width: 600px) {
+  .api-stats-grid {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .api-stat-card {
+    width: 100%;
+  }
+
+  .api-example-header {
+    margin-bottom: 8px;
   }
 }

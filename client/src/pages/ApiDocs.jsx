@@ -121,25 +121,11 @@ export default function ApiDocs() {
           The boop.cat API allows you to manage sites and trigger deployments programmatically. This is useful for CI/CD
           pipelines, GitHub Actions, and custom deployment workflows.
         </div>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <div
-            style={{
-              padding: '8px 16px',
-              background: 'var(--bg-secondary)',
-              borderRadius: 8,
-              fontSize: 13
-            }}
-          >
+        <div className="api-stats-grid">
+          <div className="api-stat-card">
             <strong>Base URL:</strong> <code>{baseUrl}/api/v1</code>
           </div>
-          <div
-            style={{
-              padding: '8px 16px',
-              background: 'var(--bg-secondary)',
-              borderRadius: 8,
-              fontSize: 13
-            }}
-          >
+          <div className="api-stat-card">
             <strong>Rate Limit:</strong> 100 requests / 15 minutes
           </div>
         </div>
@@ -197,114 +183,41 @@ export default function ApiDocs() {
         </div>
 
         {endpoints.map((endpoint, i) => (
-          <div
-            key={i}
-            style={{
-              borderBottom: i < endpoints.length - 1 ? '1px solid var(--border)' : 'none',
-              paddingBottom: i < endpoints.length - 1 ? 24 : 0,
-              marginBottom: i < endpoints.length - 1 ? 24 : 0
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+          <div key={i} className="api-endpoint-item">
+            <div className="api-endpoint-header">
               <span
+                className="api-method-badge"
                 style={{
-                  padding: '4px 10px',
-                  borderRadius: 6,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  fontFamily: 'monospace',
                   background: endpoint.method === 'POST' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(59, 130, 246, 0.15)',
                   color: endpoint.method === 'POST' ? '#22c55e' : '#3b82f6'
                 }}
               >
                 {endpoint.method}
               </span>
-              <code style={{ fontSize: 14, fontWeight: 500 }}>{endpoint.path}</code>
+              <code className="api-path">{endpoint.path}</code>
             </div>
-            <div className="muted" style={{ marginBottom: 12 }}>
+            <div className="muted" style={{ marginBottom: 16 }}>
               {endpoint.description}
             </div>
 
-            <div style={{ marginBottom: 12 }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 6
-                }}
-              >
+            <div style={{ marginBottom: 16 }}>
+              <div className="api-example-header">
                 <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>Example Request</span>
-                <button
-                  className="iconBtn"
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background: 'var(--bg-secondary)',
-                    border: 'none'
-                  }}
-                  onClick={() => copyToClipboard(endpoint.example, `example-${i}`)}
-                >
+                <button className="api-copy-btn" onClick={() => copyToClipboard(endpoint.example, `example-${i}`)}>
                   {copiedIndex === `example-${i}` ? <Check size={14} /> : <Copy size={14} />}
                 </button>
               </div>
-              <pre
-                style={{
-                  background: 'var(--bg-tertiary, #1e1e1e)',
-                  padding: 16,
-                  borderRadius: 8,
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                  color: 'var(--code-text, #e0e0e0)',
-                  overflowX: 'auto',
-                  margin: 0,
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-word'
-                }}
-              >
-                {endpoint.example}
-              </pre>
+              <pre className="api-code-block">{endpoint.example}</pre>
             </div>
 
             <div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  marginBottom: 6
-                }}
-              >
+              <div className="api-example-header">
                 <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>Example Response</span>
-                <button
-                  className="iconBtn"
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background: 'var(--bg-secondary)',
-                    border: 'none'
-                  }}
-                  onClick={() => copyToClipboard(endpoint.response, `response-${i}`)}
-                >
+                <button className="api-copy-btn" onClick={() => copyToClipboard(endpoint.response, `response-${i}`)}>
                   {copiedIndex === `response-${i}` ? <Check size={14} /> : <Copy size={14} />}
                 </button>
               </div>
-              <pre
-                style={{
-                  background: 'var(--bg-tertiary, #1e1e1e)',
-                  padding: 16,
-                  borderRadius: 8,
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                  color: 'var(--code-text, #e0e0e0)',
-                  overflowX: 'auto',
-                  margin: 0
-                }}
-              >
-                {endpoint.response}
-              </pre>
+              <pre className="api-code-block">{endpoint.response}</pre>
             </div>
           </div>
         ))}
@@ -320,22 +233,16 @@ export default function ApiDocs() {
           Here's an example workflow to trigger a deployment on every push to main:
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <button
-            className="iconBtn"
-            style={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              background: 'var(--bg-secondary)',
-              border: 'none'
-            }}
-            onClick={() =>
-              copyToClipboard(
-                `name: Deploy to boop.cat
+        <div>
+          <div className="api-example-header">
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+              .github/workflows/deploy.yml
+            </span>
+            <button
+              className="api-copy-btn"
+              onClick={() =>
+                copyToClipboard(
+                  `name: Deploy to boop.cat
 
 on:
   push:
@@ -350,24 +257,14 @@ jobs:
           curl -X POST \\
             -H "Authorization: Bearer \${{ secrets.BOOP_CAT_API_KEY }}" \\
             ${baseUrl}/api/v1/sites/YOUR_SITE_ID/deploy?wait=true`,
-                'github-actions'
-              )
-            }
-          >
-            {copiedIndex === 'github-actions' ? <Check size={14} /> : <Copy size={14} />}
-          </button>
-          <pre
-            style={{
-              background: 'var(--bg-tertiary, #1e1e1e)',
-              padding: 16,
-              borderRadius: 8,
-              fontFamily: 'monospace',
-              fontSize: 12,
-              color: 'var(--code-text, #e0e0e0)',
-              overflowX: 'auto',
-              margin: 0
-            }}
-          >
+                  'github-actions'
+                )
+              }
+            >
+              {copiedIndex === 'github-actions' ? <Check size={14} /> : <Copy size={14} />}
+            </button>
+          </div>
+          <pre className="api-code-block">
             {`name: Deploy to boop.cat
 
 on:
@@ -402,46 +299,28 @@ jobs:
           For GitLab CI/CD, add this to your <code>.gitlab-ci.yml</code>:
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <button
-            className="iconBtn"
-            style={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              background: 'var(--bg-secondary)',
-              border: 'none'
-            }}
-            onClick={() =>
-              copyToClipboard(
-                `deploy:
+        <div>
+          <div className="api-example-header">
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>.gitlab-ci.yml</span>
+            <button
+              className="api-copy-btn"
+              onClick={() =>
+                copyToClipboard(
+                  `deploy:
   stage: deploy
   image: curlimages/curl
   script:
     - curl -X POST -H "Authorization: Bearer $BOOP_CAT_API_KEY" ${baseUrl}/api/v1/sites/YOUR_SITE_ID/deploy?wait=true
   only:
     - main`,
-                'gitlab-ci'
-              )
-            }
-          >
-            {copiedIndex === 'gitlab-ci' ? <Check size={14} /> : <Copy size={14} />}
-          </button>
-          <pre
-            style={{
-              background: 'var(--bg-tertiary, #1e1e1e)',
-              padding: 16,
-              borderRadius: 8,
-              fontFamily: 'monospace',
-              fontSize: 12,
-              color: 'var(--code-text, #e0e0e0)',
-              overflowX: 'auto',
-              margin: 0
-            }}
-          >
+                  'gitlab-ci'
+                )
+              }
+            >
+              {copiedIndex === 'gitlab-ci' ? <Check size={14} /> : <Copy size={14} />}
+            </button>
+          </div>
+          <pre className="api-code-block">
             {`deploy:
   stage: deploy
   image: curlimages/curl
@@ -470,22 +349,14 @@ jobs:
           A simple Node.js script to trigger deployments:
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <button
-            className="iconBtn"
-            style={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              background: 'var(--bg-secondary)',
-              border: 'none'
-            }}
-            onClick={() =>
-              copyToClipboard(
-                `const siteId = 'YOUR_SITE_ID';
+        <div>
+          <div className="api-example-header">
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>deploy.js</span>
+            <button
+              className="api-copy-btn"
+              onClick={() =>
+                copyToClipboard(
+                  `const siteId = 'YOUR_SITE_ID';
 const apiKey = process.env.BOOP_CAT_API_KEY;
 
 async function deploy() {
@@ -501,24 +372,14 @@ async function deploy() {
 }
 
 deploy().catch(console.error);`,
-                'node-script'
-              )
-            }
-          >
-            {copiedIndex === 'node-script' ? <Check size={14} /> : <Copy size={14} />}
-          </button>
-          <pre
-            style={{
-              background: 'var(--bg-tertiary, #1e1e1e)',
-              padding: 16,
-              borderRadius: 8,
-              fontFamily: 'monospace',
-              fontSize: 12,
-              color: 'var(--code-text, #e0e0e0)',
-              overflowX: 'auto',
-              margin: 0
-            }}
-          >
+                  'node-script'
+                )
+              }
+            >
+              {copiedIndex === 'node-script' ? <Check size={14} /> : <Copy size={14} />}
+            </button>
+          </div>
+          <pre className="api-code-block">
             {`const siteId = 'YOUR_SITE_ID';
 const apiKey = process.env.BOOP_CAT_API_KEY;
 
@@ -549,22 +410,16 @@ deploy().catch(console.error);`}
           For Tangled.org (Spindle), create only <code>.tangled/workflows/deploy.yml</code>:
         </div>
 
-        <div style={{ position: 'relative' }}>
-          <button
-            className="iconBtn"
-            style={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              background: 'var(--bg-secondary)',
-              border: 'none'
-            }}
-            onClick={() =>
-              copyToClipboard(
-                `when:
+        <div>
+          <div className="api-example-header">
+            <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>
+              .tangled/workflows/deploy.yml
+            </span>
+            <button
+              className="api-copy-btn"
+              onClick={() =>
+                copyToClipboard(
+                  `when:
   - event: ["push"]
     branch: ["main"]
 
@@ -583,24 +438,14 @@ steps:
       curl -X POST \\
         -H "Authorization: Bearer $BOOP_CAT_API_KEY" \\
         ${baseUrl}/api/v1/sites/YOUR_SITE_ID/deploy?wait=true`,
-                'tangled-ci'
-              )
-            }
-          >
-            {copiedIndex === 'tangled-ci' ? <Check size={14} /> : <Copy size={14} />}
-          </button>
-          <pre
-            style={{
-              background: 'var(--bg-tertiary, #1e1e1e)',
-              padding: 16,
-              borderRadius: 8,
-              fontFamily: 'monospace',
-              fontSize: 12,
-              color: 'var(--code-text, #e0e0e0)',
-              overflowX: 'auto',
-              margin: 0
-            }}
-          >
+                  'tangled-ci'
+                )
+              }
+            >
+              {copiedIndex === 'tangled-ci' ? <Check size={14} /> : <Copy size={14} />}
+            </button>
+          </div>
+          <pre className="api-code-block">
             {`when:
   - event: ["push"]
     branch: ["main"]
