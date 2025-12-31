@@ -438,9 +438,9 @@ export default function DashboardSite() {
     setEnvDraft(site.envText || '');
     setSettingsDraft({
       name: site.name || '',
-      gitUrl: site.git?.url || '',
-      branch: site.git?.branch || 'main',
-      subdir: site.git?.subdir || '',
+      gitUrl: site.gitUrl || site.git?.url || '',
+      branch: site.gitBranch || site.git?.branch || 'main',
+      subdir: site.gitSubdir || site.git?.subdir || '',
       domain: edgeOnly ? toEdgeLabel(site.domain || '') : site.domain || '',
       buildCommand: site.buildCommand || '',
       outputDir: site.outputDir || ''

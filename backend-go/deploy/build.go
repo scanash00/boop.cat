@@ -6,11 +6,54 @@ package deploy
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 )
+
+func validateBuildCommand(cmd string) error {
+	cmd = strings.TrimSpace(cmd)
+	if cmd == "" {
+		return nil
+	}
+
+	dangerousMap := []string{
+		"&", "|", ";", ">", "<", "`", "$(",
+	}
+	for _, char := range dangerousMap {
+		if strings.Contains(cmd, char) {
+			return fmt.Errorf("command contains forbidden character: %s", char)
+		}
+	}
+
+	allowedPrefixes := []string{
+		"npm ", "yarn ", "pnpm ", "bun ", "npx ", "node ",
+	}
+	isAllowed := false
+	for _, p := range allowedPrefixes {
+		if strings.HasPrefix(cmd, p) {
+			isAllowed = true
+			break
+		}
+	}
+	if !isAllowed {
+		return errors.New("command must start with npm, yarn, pnpm, bun, npx, or node")
+	}
+
+	forbiddenKeywords := []string{
+		" start", " dev", " serve", " preview", " watch",
+	}
+	for _, kw := range forbiddenKeywords {
+		if strings.Contains(cmd, kw) {
+			return fmt.Errorf("command looks like a runtime server (contains '%s'), only build commands are allowed", strings.TrimSpace(kw))
+		}
+	}
+
+	return nil
+}
 
 func fileExists(path string) bool {
 	_, err := os.Stat(path)
@@ -130,6 +173,9 @@ func (b *BuildSystem) Build(ctx context.Context, customCommand string) (string, 
 	}
 
 	if customCommand != "" {
+		if err := validateBuildCommand(customCommand); err != nil {
+			return "", fmt.Errorf("invalid build command: %w", err)
+		}
 		if b.Logger != nil {
 			b.Logger(fmt.Sprintf("Running custom build command: %s\n", customCommand))
 		}

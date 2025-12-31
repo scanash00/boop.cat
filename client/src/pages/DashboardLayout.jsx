@@ -152,7 +152,10 @@ function Sidebar({ sites, selectedId, collapsed, onToggle, user, onLogout, mobil
                   <div className="sidebarProjectInfo">
                     <span className="sidebarProjectName">{s.name}</span>
                     <span className="sidebarProjectUrl">
-                      {s.domain || s.git?.url?.replace('https://github.com/', '') || ''}
+                      {s.domain ||
+                        s.gitUrl?.replace('https://github.com/', '') ||
+                        s.git?.url?.replace('https://github.com/', '') ||
+                        ''}
                     </span>
                   </div>
                 </Link>
