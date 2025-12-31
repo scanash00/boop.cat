@@ -1719,6 +1719,10 @@ html[data-theme='dark'] .landing-page .cta-card {
 }
 
 @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
   to {
     transform: rotate(360deg);
   }
@@ -1726,6 +1730,7 @@ html[data-theme='dark'] .landing-page .cta-card {
 
 .animate-spin {
   animation: spin 1s linear infinite;
+  display: inline-block;
 }
 
 .sidebarUser {

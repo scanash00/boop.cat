@@ -24,7 +24,8 @@ import {
   Eye,
   EyeOff,
   Trash2,
-  Plus
+  Plus,
+  Loader2
 } from 'lucide-react';
 
 function Toast({ message, onClose }) {
@@ -357,6 +358,7 @@ export default function DashboardSite() {
   const [visibleEnvKeys, setVisibleEnvKeys] = useState(new Set());
   const [envModalOpen, setEnvModalOpen] = useState(false);
   const [editingEnv, setEditingEnv] = useState(null); // { key, value } for edit mode
+  const [pollingDomains, setPollingDomains] = useState(new Set());
 
   const repoInfo = useMemo(() => {
     const gitUrl = site?.git?.url || '';
@@ -707,14 +709,23 @@ export default function DashboardSite() {
   }
 
   async function pollCustomDomain(customDomainId) {
+    setPollingDomains((prev) => new Set(prev).add(customDomainId));
     try {
       const data = await api(
         `/api/sites/${encodeURIComponent(site.id)}/custom-domains/${encodeURIComponent(customDomainId)}/poll`,
         { method: 'POST' }
       );
       setCustomDomains((prev) => prev.map((d) => (d.id === customDomainId ? { ...d, ...data } : d)));
+      setToast('Domain status updated.');
     } catch (e) {
       console.error('Poll failed:', e);
+      setError(e.message || 'Failed to check domain status.');
+    } finally {
+      setPollingDomains((prev) => {
+        const next = new Set(prev);
+        next.delete(customDomainId);
+        return next;
+      });
     }
   }
 
@@ -1097,8 +1108,19 @@ export default function DashboardSite() {
                         </div>
                         <div className="actions">
                           {isPending && (
-                            <button className="btn ghost" onClick={() => pollCustomDomain(d.id)}>
-                              Check
+                            <button
+                              className="btn ghost"
+                              disabled={pollingDomains.has(d.id)}
+                              onClick={() => pollCustomDomain(d.id)}
+                            >
+                              {pollingDomains.has(d.id) ? (
+                                <>
+                                  <Loader2 size={14} className="animate-spin" style={{ marginRight: 6 }} />
+                                  Checking...
+                                </>
+                              ) : (
+                                'Check'
+                              )}
                             </button>
                           )}
                           <button className="btn danger" onClick={() => removeCustomDomain(d.id)}>

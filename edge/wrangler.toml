@@ -5,11 +5,9 @@ compatibility_date = "2025-12-18"
 # Enable workers.dev subdomain (needed for custom domain fallback origin)
 workers_dev = true
 
-# Handle *.boop.cat subdomains 
-# Custom domains use Cloudflare for SaaS and route through sites.boop.cat fallback
+# Handle all traffic on the zone, including CF for SaaS custom hostnames
 routes = [
-  { pattern = "*.boop.cat/*", zone_name = "boop.cat" },
-  { pattern = "sites.boop.cat", custom_domain = true }
+  { pattern = "*/*", zone_name = "boop.cat" }
 ]
 
 # Custom domain support - the fallback origin (sites.boop.cat) should CNAME to this worker

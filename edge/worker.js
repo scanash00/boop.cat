@@ -82,6 +82,10 @@ export default {
     const hostname = (request.headers.get('x-forwarded-host') || url.hostname).toLowerCase();
     const { ROOT_DOMAIN, B2_DOWNLOAD_BASE, B2_BUCKET_NAME, B2_KEY_ID, B2_APP_KEY, ROUTING } = env;
 
+    if (hostname === ROOT_DOMAIN) {
+      return fetch(request);
+    }
+
     if (!B2_DOWNLOAD_BASE || !B2_BUCKET_NAME) {
       return new Response('Service misconfigured', { status: 500 });
     }
