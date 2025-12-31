@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 const ASSET_EXTENSIONS =
   /\.(js|mjs|css|png|jpg|jpeg|webp|avif|svg|gif|ico|woff|woff2|ttf|otf|eot|map|json|xml|txt|pdf|mp4|webm|mp3|wav)$/i;
 

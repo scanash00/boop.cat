@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, AlertTriangle, Link2, Unlink, Key, Copy, Check, Trash2 } from 'lucide-react';

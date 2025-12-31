@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {

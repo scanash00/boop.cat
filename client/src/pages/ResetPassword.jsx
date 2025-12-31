@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ThemeToggle from '../components/ThemeToggle.jsx';

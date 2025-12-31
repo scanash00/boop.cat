@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 import React from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Book, Key, Terminal, Copy, Check, ExternalLink } from 'lucide-react';

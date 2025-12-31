@@ -1,3 +1,7 @@
+// Copyright 2025 boop.cat
+// Licensed under the Apache License, Version 2.0
+// See LICENSE file for details.
+
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { ArrowLeft, Link as LinkIcon, Github, Lock, Search, Loader2, Book, GitBranch, ArrowRight } from 'lucide-react';
