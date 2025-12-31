@@ -96,7 +96,6 @@ func initSchema(db *sql.DB) error {
 		logsPath TEXT,
 		commitSha TEXT,
 		commitMessage TEXT,
-		commitMessage TEXT,
 		commitAuthor TEXT,
 		commitAvatar TEXT,
 		FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,

@@ -338,6 +338,24 @@ function Landing() {
         <div className="footer-inner">
           <span>© 2025 boop.cat</span>
           <div className="footer-links">
+            <a
+              href="https://tangled.org/scanash.com/boop.cat/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tangled-footer-link"
+            >
+              <img
+                src="https://assets.tangled.network/tangled_dolly_face_only_black_on_trans.svg"
+                className="tangled-icon light-only"
+                alt="Tangled"
+              />
+              <img
+                src="https://assets.tangled.network/tangled_dolly_face_only_white_on_trans.svg"
+                className="tangled-icon dark-only"
+                alt="Tangled"
+              />
+              <span>Tangled</span>
+            </a>
             <Link to="/tos">Terms</Link>
             <Link to="/privacy">Privacy</Link>
             <Link to="/dmca">DMCA</Link>
