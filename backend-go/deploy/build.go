@@ -174,6 +174,9 @@ func (b *BuildSystem) Build(ctx context.Context, customCommand string) (string, 
 
 	if customCommand != "" {
 		if err := validateBuildCommand(customCommand); err != nil {
+			if b.Logger != nil {
+				b.Logger(fmt.Sprintf("Invalid build command: %v\n", err))
+			}
 			return "", fmt.Errorf("invalid build command: %w", err)
 		}
 		if b.Logger != nil {
