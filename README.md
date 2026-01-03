@@ -32,8 +32,10 @@ This is boop.cat's codebase, and it was released under the [Apache License 2.0](
 
 ```bash
 # Clone the repository
-git clone https://tangled.org/scanash.com/boombox
-cd boombox
+git clone https://tangled.org/scanash.com/boop.cat
+or
+git clone https://github.com/scanash00/boop.cat
+cd boop.cat
 
 # Install frontend dependencies
 npm install
