@@ -50,6 +50,8 @@ func (h *AuthHandler) OAuthCallback(w http.ResponseWriter, r *http.Request) {
 
 		_, _ = h.DB.Exec(`UPDATE oauthAccounts SET accessToken = ? WHERE id = ?`, gothUser.AccessToken, existingAcc.ID)
 
+		h.DB.Exec(`UPDATE users SET emailVerified = 1 WHERE id = ?`, existingAcc.UserID)
+
 		if err := middleware.LoginUser(w, r, existingAcc.UserID); err != nil {
 			http.Redirect(w, r, "/?error=session-error", http.StatusTemporaryRedirect)
 			return
@@ -78,6 +80,8 @@ func (h *AuthHandler) OAuthCallback(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		h.DB.Exec(`UPDATE users SET emailVerified = 1 WHERE id = ?`, existingUser.ID)
+
 		if err := middleware.LoginUser(w, r, existingUser.ID); err != nil {
 			http.Redirect(w, r, "/?error=session-error", http.StatusTemporaryRedirect)
 			return
@@ -95,16 +99,7 @@ func (h *AuthHandler) OAuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	verified := false
-	if v, ok := gothUser.RawData["verified"].(bool); ok && v {
-		verified = true
-	} else if v, ok := gothUser.RawData["email_verified"].(bool); ok && v {
-		verified = true
-	}
-
-	if verified {
-		_, _ = h.DB.Exec(`UPDATE users SET emailVerified = 1 WHERE id = ?`, userID)
-	}
+	_, _ = h.DB.Exec(`UPDATE users SET emailVerified = 1 WHERE id = ?`, userID)
 
 	err = db.CreateOAuthAccount(h.DB, cuid2.Generate(), provider, gothUser.UserID, userID, gothUser.AccessToken, gothUser.Name)
 	if err != nil {

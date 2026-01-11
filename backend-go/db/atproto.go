@@ -62,9 +62,10 @@ func FindOrCreateUserFromAtproto(db *sql.DB, did, handle, email, avatar, linkToU
 		}
 
 		if updates {
-
-			_, _ = db.Exec(`UPDATE users SET username = ?, avatarUrl = ?, email = ? WHERE id = ?`,
+			_, _ = db.Exec(`UPDATE users SET username = ?, avatarUrl = ?, email = ?, emailVerified = 1 WHERE id = ?`,
 				user.Username, user.AvatarURL, user.Email, user.ID)
+		} else {
+			_, _ = db.Exec(`UPDATE users SET emailVerified = 1 WHERE id = ?`, user.ID)
 		}
 
 		UpdateLastLogin(db, user.ID)
@@ -119,10 +120,7 @@ func FindOrCreateUserFromAtproto(db *sql.DB, did, handle, email, avatar, linkToU
 	uid := cuid2.Generate()
 	now := time.Now().UTC().Format(time.RFC3339)
 
-	emailVerified := 0
-	if email != "" {
-		emailVerified = 1
-	}
+	emailVerified := 1
 
 	_, err = db.Exec(`INSERT INTO users (id, email, username, avatarUrl, emailVerified, createdAt, lastLoginAt) VALUES (?, ?, ?, ?, ?, ?, ?)`,
 		uid, finalEmail, username, avatar, emailVerified, now, now)
