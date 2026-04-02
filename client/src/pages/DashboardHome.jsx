@@ -6,24 +6,39 @@ import React from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import MillyLogo from '../components/MillyLogo.jsx';
 
+const PROJECT_COLORS = [
+  '#e88978', '#6ba3e8', '#72d2cf', '#9b87f5', '#f5a524',
+  '#e87298', '#4ecdc4', '#a78bfa', '#fb923c', '#34d399',
+];
+
+function getProjectColor(name) {
+  let hash = 0;
+  for (let i = 0; i < (name || '').length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return PROJECT_COLORS[Math.abs(hash) % PROJECT_COLORS.length];
+}
+
 export default function DashboardHome() {
   const { me, sites } = useOutletContext();
   const siteLimitReached = sites.length >= 10;
 
   return (
     <div className="page">
-      <div className="pageHeader">
+      <div className="pageHeader" style={{ padding: '20px 0 40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div>
-          <div className="h">Your Websites</div>
-          <div className="muted">Manage deployments and environment variables.</div>
+          <h1 style={{ fontSize: '3rem', fontWeight: 800, margin: '0 0 12px', letterSpacing: '-0.03em', lineHeight: 1 }}>
+            Your <span style={{ color: 'var(--accent)' }}>Websites</span>
+          </h1>
+          <div className="muted" style={{ fontSize: '1.1rem' }}>Manage deployments and environment variables.</div>
         </div>
         <div className="topActions">
           {siteLimitReached ? (
-            <button className="btn primary" disabled>
+            <button className="btn primary" disabled style={{ padding: '16px 28px', fontSize: '16px' }}>
               + New website
             </button>
           ) : (
-            <Link to="/dashboard/new" className="btn primary">
+            <Link to="/dashboard/new" className="btn primary" style={{ padding: '16px 28px', fontSize: '16px' }}>
               + New website
             </Link>
           )}
@@ -42,33 +57,68 @@ export default function DashboardHome() {
         </div>
       )}
 
-      <div className="gridCards">
-        {sites.map((s) => (
-          <Link key={s.id} className="projectCard" to={`/dashboard/site/${s.id}`}>
-            <div className="projectTitle">{s.name}</div>
-            <div className="muted" style={{ marginTop: 8, fontSize: 13 }}>
-              {s.domain ? s.domain : s.git?.url?.replace('https://github.com/', '')}
-            </div>
-            <div className="projectMeta">
-              <span className="chip">{s.git?.branch || 'main'}</span>
-              {s.git?.subdir && <span className="chip">{s.git.subdir}</span>}
-            </div>
-          </Link>
-        ))}
+      <div className="bentoGrid">
+        {sites.map((s, index) => {
+          const color = getProjectColor(s.name);
+          const letter = (s.name || '?')[0].toUpperCase();
+          const isHero = index === 0 && sites.length > 0;
+
+          return (
+            <Link key={s.id} className={`projectCard ${isHero ? 'bentoHero' : 'bentoNormal'}`} to={`/dashboard/site/${s.id}`}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: isHero ? 24 : 16 }}>
+                <div
+                  style={{
+                    width: isHero ? 76 : 52,
+                    height: isHero ? 76 : 52,
+                    borderRadius: isHero ? 18 : 12,
+                    background: color,
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 900,
+                    fontSize: isHero ? 34 : 24,
+                    flexShrink: 0,
+                    border: '3px solid var(--card-text)',
+                    boxShadow: '3px 3px 0 var(--card-text)',
+                    letterSpacing: '-0.04em',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  {letter}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="projectTitle" style={{ fontSize: isHero ? 24 : 18, marginBottom: isHero ? 8 : 4 }}>
+                    {s.name}
+                  </div>
+                  <div className="muted" style={{ fontSize: isHero ? 15 : 13, wordBreak: 'break-all' }}>
+                    {s.domain ? s.domain : s.git?.url?.replace('https://github.com/', '')}
+                  </div>
+                </div>
+              </div>
+              <div className="projectMeta" style={{ marginTop: 'auto', paddingTop: isHero ? 24 : 16 }}>
+                <span className="chip" style={{ fontSize: isHero ? 13 : 11 }}>{s.git?.branch || 'main'}</span>
+                {s.git?.subdir && <span className="chip" style={{ fontSize: isHero ? 13 : 11 }}>{s.git.subdir}</span>}
+              </div>
+            </Link>
+          );
+        })}
 
         {sites.length === 0 && (
-          <div className="panel" style={{ gridColumn: '1 / -1' }}>
-            <div style={{ textAlign: 'center', padding: '32px 24px' }}>
-              <MillyLogo size={64} style={{ marginBottom: 20 }} />
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: 8 }}>Create your first website</h3>
+          <div className="panel" style={{ gridColumn: '1 / -1', border: '3px dashed var(--card-text)', background: 'var(--card-bg-solid)', boxShadow: '6px 6px 0 var(--card-text)', opacity: 0.85 }}>
+            <div style={{ textAlign: 'center', padding: '64px 24px' }}>
+              <div style={{ marginBottom: 32, animation: 'float 4s ease-in-out infinite', cursor: 'default' }}>
+                <MillyLogo size={96} />
+              </div>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: 12, letterSpacing: '-0.02em' }}>No websites yet</h3>
               <div
                 className="muted"
-                style={{ marginBottom: 24, maxWidth: 320, marginLeft: 'auto', marginRight: 'auto' }}
+                style={{ marginBottom: 32, maxWidth: 420, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6, fontSize: '1.1rem' }}
               >
-                Deploy static sites from any Git repository in seconds.
+                Deploy blazing fast static sites from any Git repository. Connect your GitHub or paste a URL to get started in seconds.
               </div>
-              <Link to="/dashboard/new" className="btn primary">
-                + New website
+              <Link to="/dashboard/new" className="btn primary" style={{ padding: '16px 32px', fontSize: '16px' }}>
+                Deploy your first site
               </Link>
             </div>
           </div>

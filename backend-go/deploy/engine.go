@@ -33,6 +33,7 @@ type Engine struct {
 	CFToken        string
 	CFAccountID    string
 	CFNamespaceID  string
+	Cache          *BuildCache
 	deploymentsMux sync.Mutex
 	deployments    map[string]context.CancelFunc
 }
@@ -41,6 +42,9 @@ func NewEngine(database *sql.DB, b2KeyID, b2AppKey, b2BucketID, cfToken, cfAccou
 
 	workDir := filepath.Join(os.TempDir(), "fsd-builds")
 	os.MkdirAll(workDir, 0755)
+
+	cacheDir := filepath.Join(workDir, "cache")
+	os.MkdirAll(cacheDir, 0755)
 
 	return &Engine{
 		DB:            database,
@@ -51,9 +55,11 @@ func NewEngine(database *sql.DB, b2KeyID, b2AppKey, b2BucketID, cfToken, cfAccou
 		CFToken:       cfToken,
 		CFAccountID:   cfAccount,
 		CFNamespaceID: cfNamespace,
+		Cache:         &BuildCache{CacheDir: cacheDir},
 		deployments:   make(map[string]context.CancelFunc),
 	}
 }
+
 
 func (e *Engine) DeploySite(siteID, userID string, logStream chan<- string) (*db.Deployment, error) {
 
@@ -299,6 +305,8 @@ func (e *Engine) runPipeline(ctx context.Context, siteID, userID, deployID strin
 		RootDir: buildDir,
 		Env:     envVars,
 		Logger:  logger,
+		Cache:   e.Cache,
+		SiteID:  siteID,
 	}
 
 	customBuildCmd := ""

@@ -9,7 +9,6 @@ import {
   Settings,
   LogOut,
   Zap,
-  Globe,
   AlertTriangle,
   User,
   ChevronDown,
@@ -96,6 +95,48 @@ function UserDropdown({ user, onLogout }) {
   );
 }
 
+const PROJECT_COLORS = [
+  '#e88978', '#6ba3e8', '#72d2cf', '#9b87f5', '#f5a524',
+  '#e87298', '#4ecdc4', '#a78bfa', '#fb923c', '#34d399',
+];
+
+function getProjectColor(name) {
+  let hash = 0;
+  for (let i = 0; i < (name || '').length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return PROJECT_COLORS[Math.abs(hash) % PROJECT_COLORS.length];
+}
+
+function ProjectAvatar({ name, size = 28 }) {
+  const color = getProjectColor(name);
+  const letter = (name || '?')[0].toUpperCase();
+  return (
+    <div
+      className="projectAvatar"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: size * 0.3,
+        background: color,
+        color: '#fff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 900,
+        fontSize: size * 0.46,
+        flexShrink: 0,
+        border: '2px solid var(--card-text)',
+        letterSpacing: '-0.03em',
+        boxShadow: '2px 2px 0 var(--card-text)',
+        fontFamily: 'inherit',
+      }}
+    >
+      {letter}
+    </div>
+  );
+}
+
 function Sidebar({ sites, selectedId, collapsed, onToggle, user, onLogout, mobileOpen, onMobileClose }) {
   const avatar = getAvatar(user, 64);
   const displayName = user?.username || user?.email || 'User';
@@ -124,15 +165,27 @@ function Sidebar({ sites, selectedId, collapsed, onToggle, user, onLogout, mobil
         </div>
 
         <nav className="sidebarNav">
-          <Link className="sidebarLink" to="/dashboard" title="All websites">
+          <Link
+            className={`sidebarLink ${location.pathname === '/dashboard' || location.pathname === '/dashboard/' ? 'active' : ''}`}
+            to="/dashboard"
+            title="All websites"
+          >
             <LayoutDashboard size={20} />
             {!isCollapsed && <span>All websites</span>}
           </Link>
-          <Link className="sidebarLink" to="/dashboard/account" title="Settings">
+          <Link
+            className={`sidebarLink ${location.pathname.startsWith('/dashboard/account') ? 'active' : ''}`}
+            to="/dashboard/account"
+            title="Settings"
+          >
             <Settings size={20} />
             {!isCollapsed && <span>Settings</span>}
           </Link>
-          <Link className="sidebarLink" to="/dashboard/api-docs" title="API Docs">
+          <Link
+            className={`sidebarLink ${location.pathname.startsWith('/dashboard/api-docs') ? 'active' : ''}`}
+            to="/dashboard/api-docs"
+            title="API Docs"
+          >
             <Book size={20} />
             {!isCollapsed && <span>API Docs</span>}
           </Link>
@@ -148,7 +201,7 @@ function Sidebar({ sites, selectedId, collapsed, onToggle, user, onLogout, mobil
                   className={`sidebarProject ${s.id === selectedId ? 'active' : ''}`}
                   to={`/dashboard/site/${s.id}`}
                 >
-                  <Globe size={16} />
+                  <ProjectAvatar name={s.name} size={28} />
                   <div className="sidebarProjectInfo">
                     <span className="sidebarProjectName">{s.name}</span>
                     <span className="sidebarProjectUrl">
@@ -169,11 +222,12 @@ function Sidebar({ sites, selectedId, collapsed, onToggle, user, onLogout, mobil
             {sites.map((s) => (
               <Link
                 key={s.id}
-                className={`sidebarLink ${s.id === selectedId ? 'active' : ''}`}
+                className={`sidebarProject ${s.id === selectedId ? 'active' : ''}`}
                 to={`/dashboard/site/${s.id}`}
                 title={s.name}
+                style={{ justifyContent: 'center', padding: '8px', position: 'relative' }}
               >
-                <Globe size={20} />
+                <ProjectAvatar name={s.name} size={32} />
               </Link>
             ))}
           </div>

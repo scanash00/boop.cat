@@ -64,6 +64,8 @@ type BuildSystem struct {
 	RootDir string
 	Env     []string
 	Logger  func(string)
+	Cache   *BuildCache
+	SiteID  string
 }
 
 func (b *BuildSystem) DetectPackageManager() string {
@@ -161,14 +163,38 @@ func (b *BuildSystem) Build(ctx context.Context, customCommand string) (string, 
 	pm := b.DetectPackageManager()
 
 	if fileExists(filepath.Join(b.RootDir, "package.json")) {
-		installArgs := b.InstallArgs(pm)
-
-		if b.Logger != nil {
-			b.Logger(fmt.Sprintf("Installing dependencies with %s %v...\n", pm, installArgs))
+		cacheHit := false
+		lockHash := ""
+		if b.Cache != nil && b.SiteID != "" {
+			lockHash = b.Cache.LockfileHash(b.RootDir)
+			if lockHash != "" {
+				cacheHit = b.Cache.RestoreNodeModules(b.SiteID, b.RootDir, lockHash, b.Logger)
+				if cacheHit && b.Logger != nil {
+					b.Logger("Cache hit: restored node_modules from cache\n")
+				}
+			}
 		}
 
-		if err := b.RunCommand(ctx, pm, installArgs...); err != nil {
-			return "", fmt.Errorf("install failed: %w", err)
+		if !cacheHit {
+			installArgs := b.InstallArgs(pm)
+
+			if b.Logger != nil {
+				if lockHash != "" {
+					b.Logger("Cache miss: installing dependencies fresh\n")
+				}
+				b.Logger(fmt.Sprintf("Installing dependencies with %s %v...\n", pm, installArgs))
+			}
+
+			if err := b.RunCommand(ctx, pm, installArgs...); err != nil {
+				return "", fmt.Errorf("install failed: %w", err)
+			}
+
+			if b.Cache != nil && b.SiteID != "" && lockHash != "" {
+				if b.Logger != nil {
+					b.Logger("Saving node_modules to cache...\n")
+				}
+				b.Cache.SaveNodeModules(b.SiteID, b.RootDir, lockHash, b.Logger)
+			}
 		}
 	}
 

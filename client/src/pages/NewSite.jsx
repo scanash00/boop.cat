@@ -529,8 +529,34 @@ export default function NewSite() {
                     </div>
 
                     {repos.length === 0 && (
-                      <div className="repoEmptyState" style={{ textAlign: 'center', padding: '32px' }}>
-                        No repositories found
+                      <div className="repoEmptyState" style={{ textAlign: 'center', padding: '40px 24px' }}>
+                        <Search size={32} style={{ marginBottom: 12, opacity: 0.3 }} />
+                        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>No repositories found</div>
+                        <div className="muted" style={{ fontSize: 13 }}>
+                          {searchQuery ? 'Try a different search term' : 'No accessible repositories'}
+                        </div>
+                      </div>
+                    )}
+
+                    {(hasNextPage || reposPage > 1) && (
+                      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--card-border)' }}>
+                        <button
+                          className="btn ghost"
+                          disabled={reposPage <= 1}
+                          onClick={() => fetchRepos(reposPage - 1, searchQuery, { background: false })}
+                        >
+                          ← Previous
+                        </button>
+                        <span className="muted" style={{ display: 'flex', alignItems: 'center', fontSize: 13 }}>
+                          Page {reposPage}
+                        </span>
+                        <button
+                          className="btn ghost"
+                          disabled={!hasNextPage}
+                          onClick={() => fetchRepos(reposPage + 1, searchQuery, { background: false })}
+                        >
+                          Next →
+                        </button>
                       </div>
                     )}
                   </>

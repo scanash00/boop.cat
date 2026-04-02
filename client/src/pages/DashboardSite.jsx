@@ -25,7 +25,11 @@ import {
   EyeOff,
   Trash2,
   Plus,
-  Loader2
+  Loader2,
+  Play,
+  Square,
+  Github,
+  Globe
 } from 'lucide-react';
 
 function Toast({ message, onClose }) {
@@ -743,20 +747,32 @@ export default function DashboardSite() {
 
   return (
     <div className="page">
-      <div className="pageHeader">
+      <div className="pageHeader" style={{ padding: '20px 0 40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
         <div>
-          <div className="crumbs">
+          <div className="crumbs" style={{ marginBottom: 12, fontSize: 14 }}>
             <span className="muted">Dashboard</span>
-            <span className="muted">/</span>
+            <span className="muted"> / </span>
             <span className="crumb">{site.name}</span>
           </div>
-          <div className="h">{site.name}</div>
-          <div className="muted">{site.domain ? site.domain : site.git?.url}</div>
+          <h1 style={{ fontSize: '3rem', fontWeight: 900, margin: '0 0 10px', letterSpacing: '-0.035em', lineHeight: 1 }}>
+            {site.name}
+          </h1>
+          <div className="muted" style={{ fontSize: '1rem', wordBreak: 'break-all', display: 'flex', alignItems: 'center', gap: 6 }}>
+            {site.domain ? (
+              <><Globe size={14} /> {site.domain}</>
+            ) : (
+              <><Github size={14} /> {site.git?.url?.replace('https://github.com/', '')}</>
+            )}
+          </div>
         </div>
 
         <div className="topActions">
           <button className="btn primary" disabled={deploying || (me && me.emailVerified === false)} onClick={deploy}>
-            {deploying ? 'Deploying...' : 'Deploy'}
+            {deploying ? (
+              <><Loader2 size={16} className="animate-spin" /> Deploying…</>
+            ) : (
+              <><Play size={16} /> Deploy</>
+            )}
           </button>
 
           <button
@@ -765,7 +781,7 @@ export default function DashboardSite() {
             onClick={() => activeDeployment && stopDeployment(activeDeployment.id)}
             style={{ marginLeft: 10 }}
           >
-            Stop
+            <Square size={16} /> Stop
           </button>
         </div>
       </div>
@@ -811,7 +827,7 @@ export default function DashboardSite() {
               Deployments
             </div>
             <div className="muted" style={{ marginBottom: 10 }}>
-              Deploy + logs + stop
+              View deployment history and build logs
             </div>
             <div className="deployList">
               {deployments.map((d) => (
@@ -908,7 +924,12 @@ export default function DashboardSite() {
                   </div>
                 </div>
               ))}
-              {deployments.length === 0 ? <div className="muted">No deployments yet.</div> : null}
+              {deployments.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '32px 16px' }}>
+                  <div style={{ fontSize: 40, marginBottom: 12, opacity: 0.6 }}>🚀</div>
+                  <div className="muted" style={{ fontSize: 14 }}>No deployments yet. Hit <strong>Deploy</strong> above to get started.</div>
+                </div>
+              ) : null}
             </div>
           </>
         ) : null}

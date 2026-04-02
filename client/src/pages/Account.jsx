@@ -319,7 +319,7 @@ export default function Account() {
       <div className="grid2">
         <div className="panel">
           <div className="panelTitle">
-            <Mail size={18} style={{ marginRight: 8, color: '#e88978' }} />
+            <Mail size={18} style={{ marginRight: 8, color: 'var(--accent)' }} />
             Email Address
           </div>
           <div className="muted" style={{ marginBottom: 16, fontSize: 13 }}>
@@ -366,7 +366,7 @@ export default function Account() {
 
         <div className="panel">
           <div className="panelTitle">
-            <Lock size={18} style={{ marginRight: 8, color: '#e88978' }} />
+            <Lock size={18} style={{ marginRight: 8, color: 'var(--accent)' }} />
             Password
           </div>
           <div className="muted" style={{ marginBottom: 16, fontSize: 13 }}>
@@ -417,7 +417,7 @@ export default function Account() {
       {}
       <div className="panel" style={{ marginTop: 8 }}>
         <div className="panelTitle">
-          <Link2 size={18} style={{ marginRight: 8, color: '#e88978' }} />
+          <Link2 size={18} style={{ marginRight: 8, color: 'var(--accent)' }} />
           Linked Accounts
         </div>
         <div className="muted" style={{ marginBottom: 16, fontSize: 13 }}>
@@ -447,9 +447,11 @@ export default function Account() {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '12px 16px',
-                        background: 'var(--bg-secondary)',
-                        borderRadius: 8,
-                        marginBottom: 8
+                        background: 'var(--card-bg-solid)',
+                        border: '2px solid var(--card-text)',
+                        borderRadius: 12,
+                        marginBottom: 8,
+                        boxShadow: '3px 3px 0 var(--card-text)',
                       }}
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -540,7 +542,7 @@ export default function Account() {
       {}
       <div className="panel" style={{ marginTop: 8 }}>
         <div className="panelTitle">
-          <Key size={18} style={{ marginRight: 8, color: '#e88978' }} />
+          <Key size={18} style={{ marginRight: 8, color: 'var(--accent)' }} />
           API Keys
         </div>
         <div className="muted" style={{ marginBottom: 16, fontSize: 13 }}>
@@ -590,7 +592,7 @@ export default function Account() {
               <button
                 className="iconBtn"
                 onClick={() => copyToClipboard(newlyCreatedKey.key, newlyCreatedKey.id)}
-                style={{ width: 28, height: 28, borderRadius: '50%', flexShrink: 0 }}
+                style={{ width: 28, height: 28, flexShrink: 0 }}
               >
                 {copiedKeyId === newlyCreatedKey.id ? <Check size={14} /> : <Copy size={14} />}
               </button>
