@@ -143,7 +143,7 @@ func (h *ATProtoHandler) ServeClientMetadata(w http.ResponseWriter, r *http.Requ
 		meta["policy_uri"] = fmt.Sprintf("%s/privacy", b)
 	}
 	if meta["scope"] == "" || meta["scope"] == nil {
-		meta["scope"] = "atproto transition:generic"
+		meta["scope"] = "atproto"
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -156,7 +156,7 @@ func (h *ATProtoHandler) ServeJWKS(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "atproto-not-configured", http.StatusNotFound)
 		return
 	}
-
+	keyPEM = strings.ReplaceAll(keyPEM, `\n`, "\n")
 	block, _ := pem.Decode([]byte(keyPEM))
 	if block == nil {
 		jsonError(w, "invalid-key-format", http.StatusInternalServerError)
@@ -250,7 +250,7 @@ func (h *ATProtoHandler) BeginAuth(w http.ResponseWriter, r *http.Request) {
 	v.Set("redirect_uri", redirectURI)
 	scope := os.Getenv("ATPROTO_SCOPE")
 	if scope == "" {
-		scope = "atproto transition:generic"
+		scope = "atproto"
 	}
 	v.Set("scope", scope)
 	v.Set("state", state)
@@ -511,6 +511,7 @@ func fetchPublicProfile(did string) (*PublicProfile, error) {
 
 func getPrivateKey() (*ecdsa.PrivateKey, error) {
 	keyPEM := os.Getenv("ATPROTO_PRIVATE_KEY_1")
+	keyPEM = strings.ReplaceAll(keyPEM, `\n`, "\n")
 	block, _ := pem.Decode([]byte(keyPEM))
 	if block == nil {
 		return nil, fmt.Errorf("invalid key")
