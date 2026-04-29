@@ -156,6 +156,7 @@ func (h *ATProtoHandler) ServeJWKS(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "atproto-not-configured", http.StatusNotFound)
 		return
 	}
+	keyPEM = strings.ReplaceAll(keyPEM, `\\n`, "\n")
 	keyPEM = strings.ReplaceAll(keyPEM, `\n`, "\n")
 	block, _ := pem.Decode([]byte(keyPEM))
 	if block == nil {
@@ -511,12 +512,7 @@ func fetchPublicProfile(did string) (*PublicProfile, error) {
 
 func getPrivateKey() (*ecdsa.PrivateKey, error) {
 	keyPEM := os.Getenv("ATPROTO_PRIVATE_KEY_1")
-	fmt.Printf("DEBUG key len=%d first30=%q\n", len(keyPEM), func() string {
-		if len(keyPEM) > 30 {
-			return keyPEM[:30]
-		}
-		return keyPEM
-	}())
+keyPEM = strings.ReplaceAll(keyPEM, `\\n`, "\n")
 	keyPEM = strings.ReplaceAll(keyPEM, `\n`, "\n")
 	block, _ := pem.Decode([]byte(keyPEM))
 	if block == nil {
